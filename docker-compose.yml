@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  postgresql_db:
+    image: postgres:14
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+    ports:
+      - "9123:5432"
+    environment:
+      - POSTGRES_DB=PostgreGoRestAPI
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
