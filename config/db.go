@@ -11,25 +11,32 @@ import (
 
 var DB *gorm.DB
 
-func Connect() {
-	db, err := gorm.Open(postgres.Open("postgres://postgres:postgres@localhost:9123/PostgreGoRestAPI?sslmode=disable"))
+func Connect() (*gorm.DB, error) {
+	dsn := "host=localhost user=postgres password=postgres dbname=PostgreGoRestAPI port=9123 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+
 	start := time.Now()
 	for sqlDB.Ping() != nil {
-		if start.After(start.Add(10 * time.Second)) {
-			fmt.Println("Failed to connect DB after 10 seconds")
-			break
-
+		if time.Now().After(start.Add(10 * time.Second)) {
+			return nil, fmt.Errorf("Failed to connect DB after 10 seconds")
 		}
 	}
-	fmt.Println("Connected to DB: ", sqlDB.Ping() == nil)
+	fmt.Println("Connected to DB")
 
-	db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		return nil, err
+	}
+
+	DB = db
+
+	return db, nil
 }

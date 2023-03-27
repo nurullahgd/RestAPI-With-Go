@@ -1,5 +1,5 @@
 insert into roles(role_name) values ('Teacher');
-insert into roles(role_name) values ('Teacher');
+insert into roles(role_name) values ('Student');
 
 
 insert into users(name,surname,username,email,role_id) VALUES

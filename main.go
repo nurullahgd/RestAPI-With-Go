@@ -13,5 +13,5 @@ func main() {
 	router := gin.New()
 	config.Connect()
 	routes.UserRoute(router)
-	router.Run(":4569")
+	router.Run(":4545")
 }

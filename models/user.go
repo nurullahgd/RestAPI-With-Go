@@ -1,10 +1,10 @@
 package models
 
 type User struct {
-	ID       uint64 `json:"id"`
-	Username string `json:"username"`
-	Name     string `json:"name"`
-	Surname  string `json:"surname"`
-	Email    string `json:"email"`
-	Roleid   int    `json:"role_id"`
+	ID       uint64 `json:"id" gorm:"primary key;not null"`
+	Username string `json:"username" gorm:"not null;default:null"`
+	Name     string `json:"name" gorm:"not null;default:null"`
+	Surname  string `json:"surname" gorm:"not null;default:null"`
+	Email    string `json:"email" gorm:"not null;default:null"`
+	RoleID   int    `json:"role_id" gorm:"not null;default:null"`
 }
