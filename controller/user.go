@@ -30,3 +30,32 @@ func CreateUser(ctx *gin.Context) {
 	}
 
 }
+
+func UpdateUser(ctx *gin.Context) {
+	var user models.User
+	userID := ctx.Param("id")
+	if err := config.DB.First(&user, userID).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"Error": "User not found"})
+		return
+	}
+
+	ctx.BindJSON(&user)
+	if err := config.DB.Save(&user).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		return
+	} else {
+		ctx.JSON(http.StatusOK, &user)
+	}
+}
+
+func DeleteUser(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var user models.User
+	if result := config.DB.First(&user, id); result.Error != nil {
+		ctx.AbortWithError(http.StatusNotFound, result.Error)
+		return
+	}
+	config.DB.Delete(&user)
+	ctx.Status(http.StatusOK)
+
+}

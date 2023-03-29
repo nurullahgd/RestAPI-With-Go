@@ -10,4 +10,6 @@ func UserRoute(router *gin.Engine) {
 	v1 := router.Group(("/api/v1"))
 	v1.GET("/user", controller.ListUsers)
 	v1.POST("/user", controller.CreateUser)
+	v1.POST("/userupdate", controller.UpdateUser)
+	v1.DELETE("/delete/:id", controller.DeleteUser)
 }
